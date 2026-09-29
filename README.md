@@ -1,4 +1,4 @@
-﻿# Claims API
+# Claims API
 
 [![CI](https://github.com/hamzamehmood46/claims-api-dotnet/actions/workflows/ci.yml/badge.svg)](https://github.com/hamzamehmood46/claims-api-dotnet/actions/workflows/ci.yml)
 
@@ -7,9 +7,9 @@ A medical-billing REST API in **.NET 8 / ASP.NET Core** built with **Clean Archi
 ## The domain
 
 ```
-   Draft â”€â”€submitâ”€â”€â–º Submitted â”€â”€approveâ”€â”€â–º Approved â”€â”€payâ”€â”€â–º Paid
+   Draft ──submit──► Submitted ──approve──► Approved ──pay──► Paid
    (Biller)          (Biller)      (Reviewer)                 (Biller)
-                          â””â”€â”€deny(reason)â”€â”€â–º Denied
+                          └──deny(reason)──► Denied
                                 (Reviewer)
 ```
 
