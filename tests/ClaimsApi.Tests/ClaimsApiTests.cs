@@ -195,6 +195,27 @@ public class ClaimsApiTests(ClaimsFactory factory) : IClassFixture<ClaimsFactory
     }
 
     [Fact]
+    public async Task Cors_preflight_allows_the_angular_portal_and_rejects_other_origins()
+    {
+        var client = await ClientAsync();
+
+        HttpRequestMessage Preflight(string origin)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Options, "/api/claims");
+            request.Headers.Add("Origin", origin);
+            request.Headers.Add("Access-Control-Request-Method", "GET");
+            request.Headers.Add("Access-Control-Request-Headers", "authorization");
+            return request;
+        }
+
+        var allowed = await client.SendAsync(Preflight("http://localhost:4200"));
+        var blocked = await client.SendAsync(Preflight("http://evil.example"));
+
+        Assert.Contains("http://localhost:4200", allowed.Headers.GetValues("Access-Control-Allow-Origin"));
+        Assert.False(blocked.Headers.Contains("Access-Control-Allow-Origin"));
+    }
+
+    [Fact]
     public async Task Page_size_is_capped()
     {
         var biller = await BillerAsync();

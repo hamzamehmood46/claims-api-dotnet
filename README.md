@@ -1,4 +1,4 @@
-# Claims API
+﻿# Claims API
 
 [![CI](https://github.com/hamzamehmood46/claims-api-dotnet/actions/workflows/ci.yml/badge.svg)](https://github.com/hamzamehmood46/claims-api-dotnet/actions/workflows/ci.yml)
 
@@ -7,9 +7,9 @@ A medical-billing REST API in **.NET 8 / ASP.NET Core** built with **Clean Archi
 ## The domain
 
 ```
-   Draft ──submit──► Submitted ──approve──► Approved ──pay──► Paid
+   Draft â”€â”€submitâ”€â”€â–º Submitted â”€â”€approveâ”€â”€â–º Approved â”€â”€payâ”€â”€â–º Paid
    (Biller)          (Biller)      (Reviewer)                 (Biller)
-                          └──deny(reason)──► Denied
+                          â””â”€â”€deny(reason)â”€â”€â–º Denied
                                 (Reviewer)
 ```
 
@@ -79,7 +79,7 @@ export Auth__Users__0__Username=biller Auth__Users__0__Password=... Auth__Users_
 dotnet test
 ```
 
-20 tests: every legal and illegal state transition, validation rules, auth failures, role enforcement, the full multi-role lifecycle, filtering, paging and page-size caps.
+21 tests: every legal and illegal state transition, validation rules, auth failures, role enforcement, the full multi-role lifecycle, filtering, paging, page-size caps and CORS.
 
 ## Production notes
 
@@ -90,3 +90,4 @@ dotnet test
 ## License
 
 MIT
+

@@ -30,6 +30,10 @@ builder.Services
     });
 builder.Services.AddAuthorization();
 
+// Lets a browser front end (such as the Angular claims portal on :4200) call the API.
+var corsOrigins = builder.Configuration.GetSection("Cors:Origins").Get<string[]>() ?? ["http://localhost:4200"];
+builder.Services.AddCors(o => o.AddDefaultPolicy(p => p.WithOrigins(corsOrigins).AllowAnyHeader().AllowAnyMethod()));
+
 builder.Services.AddClaimsInfrastructure(builder.Configuration);
 builder.Services.AddExceptionHandler<ApiExceptionHandler>();
 builder.Services.AddProblemDetails();
@@ -62,6 +66,7 @@ using (var scope = app.Services.CreateScope())
 app.UseExceptionHandler();
 app.UseSwagger();
 app.UseSwaggerUI();
+app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
