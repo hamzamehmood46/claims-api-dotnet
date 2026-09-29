@@ -195,6 +195,22 @@ public class ClaimsApiTests(ClaimsFactory factory) : IClassFixture<ClaimsFactory
     }
 
     [Fact]
+    public async Task Timestamps_are_returned_as_UTC_with_a_Z_so_browsers_do_not_read_them_as_local_time()
+    {
+        var biller = await BillerAsync();
+        var claim = await CreateClaimAsync(biller, (await CreatePatientAsync(biller)).Id);
+        await biller.PostAsync($"/api/claims/{claim.Id}/submit", null);
+
+        // Read the raw JSON: the typed DTO would hide whether the "Z" is present.
+        var json = await biller.GetStringAsync($"/api/claims/{claim.Id}");
+        using var doc = System.Text.Json.JsonDocument.Parse(json);
+
+        Assert.EndsWith("Z", doc.RootElement.GetProperty("createdAt").GetString());
+        Assert.EndsWith("Z", doc.RootElement.GetProperty("submittedAt").GetString());
+        Assert.Equal(System.Text.Json.JsonValueKind.Null, doc.RootElement.GetProperty("paidAt").ValueKind);
+    }
+
+    [Fact]
     public async Task Cors_preflight_allows_the_angular_portal_and_rejects_other_origins()
     {
         var client = await ClientAsync();

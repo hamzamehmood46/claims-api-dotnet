@@ -1,6 +1,7 @@
 using ClaimsApi.Application;
 using ClaimsApi.Domain;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -10,6 +11,16 @@ public class ClaimsDbContext(DbContextOptions<ClaimsDbContext> options) : DbCont
 {
     public DbSet<Patient> Patients => Set<Patient>();
     public DbSet<Claim> Claims => Set<Claim>();
+
+    /// <summary>
+    /// SQLite stores DateTime without a time zone, so values come back with Kind = Unspecified and are
+    /// serialised without a "Z". Browsers then read them as LOCAL time. Everything here is UTC, so say so.
+    /// </summary>
+    protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+    {
+        configurationBuilder.Properties<DateTime>().HaveConversion<UtcDateTimeConverter>();
+        configurationBuilder.Properties<DateTime?>().HaveConversion<NullableUtcDateTimeConverter>();
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -44,6 +55,14 @@ public class ClaimsDbContext(DbContextOptions<ClaimsDbContext> options) : DbCont
         });
     }
 }
+
+public class UtcDateTimeConverter() : ValueConverter<DateTime, DateTime>(
+    v => v.Kind == DateTimeKind.Unspecified ? DateTime.SpecifyKind(v, DateTimeKind.Utc) : v.ToUniversalTime(),
+    v => DateTime.SpecifyKind(v, DateTimeKind.Utc));
+
+public class NullableUtcDateTimeConverter() : ValueConverter<DateTime?, DateTime?>(
+    v => v.HasValue ? (v.Value.Kind == DateTimeKind.Unspecified ? DateTime.SpecifyKind(v.Value, DateTimeKind.Utc) : v.Value.ToUniversalTime()) : v,
+    v => v.HasValue ? DateTime.SpecifyKind(v.Value, DateTimeKind.Utc) : v);
 
 public static class DependencyInjection
 {

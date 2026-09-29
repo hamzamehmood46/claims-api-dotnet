@@ -79,7 +79,9 @@ export Auth__Users__0__Username=biller Auth__Users__0__Password=... Auth__Users_
 dotnet test
 ```
 
-21 tests: every legal and illegal state transition, validation rules, auth failures, role enforcement, the full multi-role lifecycle, filtering, paging, page-size caps and CORS.
+22 tests: every legal and illegal state transition, validation rules, auth failures, role enforcement, the full multi-role lifecycle, filtering, paging, page-size caps, CORS, and UTC timestamps.
+
+There's an Angular front end for this API: [claims-portal-angular](https://github.com/hamzamehmood46/claims-portal-angular).
 
 ## Production notes
 
