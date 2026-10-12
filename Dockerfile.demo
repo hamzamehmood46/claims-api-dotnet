@@ -11,4 +11,4 @@ COPY --from=build --chown=app:app /app .
 USER app
 # The JWT signing key is generated each time the container starts, so no secret lives in the repository.
 # The two sign-in accounts are public demo accounts (see the README); data resets on restart.
-ENTRYPOINT ["/bin/sh", "-c", "export ASPNETCORE_URLS=http://0.0.0.0:${PORT:-8080}; export Jwt__Key=$(head -c 48 /dev/urandom | base64 | tr -d '\\n=+/'); export Auth__Users__0__Username=biller Auth__Users__0__Password=demo-biller-pass Auth__Users__0__Role=Biller Auth__Users__1__Username=reviewer Auth__Users__1__Password=demo-reviewer-pass Auth__Users__1__Role=Reviewer; exec dotnet ClaimsApi.Api.dll"]
+ENTRYPOINT ["/bin/sh", "-c", "export ASPNETCORE_URLS=http://0.0.0.0:${PORT:-8080}; export ConnectionStrings__Claims=\"Data Source=/tmp/claims.db\"; export Jwt__Key=$(head -c 48 /dev/urandom | base64 | tr -d '\\n=+/'); export Auth__Users__0__Username=biller Auth__Users__0__Password=demo-biller-pass Auth__Users__0__Role=Biller Auth__Users__1__Username=reviewer Auth__Users__1__Password=demo-reviewer-pass Auth__Users__1__Role=Reviewer; exec dotnet ClaimsApi.Api.dll"]
