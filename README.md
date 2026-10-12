@@ -2,6 +2,8 @@
 
 [![CI](https://github.com/hamzamehmood46/claims-api-dotnet/actions/workflows/ci.yml/badge.svg)](https://github.com/hamzamehmood46/claims-api-dotnet/actions/workflows/ci.yml)
 
+**Live demo: [claims-api-dotnet.onrender.com/swagger](https://claims-api-dotnet.onrender.com/swagger)** (Swagger UI). Get a token from POST /api/auth/token with `biller` / `demo-biller-pass` (or `reviewer` / `demo-reviewer-pass`), press Authorize, and walk a claim through its workflow. These are public demo accounts. Hosted on Render's free tier, so the first load after idle can take about a minute; demo data resets on restart.
+
 A medical-billing REST API in **.NET 8 / ASP.NET Core** built with **Clean Architecture**. It manages patients and insurance claims through a strict approval workflow, with **JWT authentication and role-based authorization**.
 
 ## The domain
